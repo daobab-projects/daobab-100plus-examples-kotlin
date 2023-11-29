@@ -1,6 +1,5 @@
 package io.daobab.demo.base
 
-import io.daobab.converter.JsonHandler
 import io.daobab.demo.dao.SakilaDataBase
 import io.daobab.demo.dao.SakilaRemote
 import org.slf4j.LoggerFactory
@@ -43,9 +42,7 @@ abstract class ServiceBase<V> : ToTableConverter {
             return
         }
         log.info("************************************ -= result =- ************************************")
-        if (data is JsonHandler) {
-            log.info((data as JsonHandler).toJSON())
-        } else if (data is Collection<*>) {
+        if (data is Collection<*>) {
             (data as Collection<*>).forEach { log.info(it.toString()) }
         } else if (data is Array<*>) {
             Arrays.stream(data as Array<*>?).forEach {log.info(it.toString()) }

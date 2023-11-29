@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component
 @Component
 class SchemaComparator : ServiceBase<Unit>(), MetaDataTables {
     override fun call() {
-        val tablesInSchema = db.tables.map { it.entityName }
+        val tablesInSchema = db.tables.map { it.entityClass().simpleName }
         val columnsInSchema = db.tables
             .flatMap { it.columns() }
             .map { it.column }
-            .map { it.entityName + "." + it.columnName }
+            .map { it.entityClass().simpleName + "." + it.columnName }
         val notGeneratedTables = db.metaData
             .select(MetaDataTables.tabMetaTable.colTableName())
             .whereNotInFields(MetaDataTables.tabMetaTable.colTableName(), tablesInSchema)

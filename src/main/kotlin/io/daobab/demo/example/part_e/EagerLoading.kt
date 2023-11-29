@@ -21,7 +21,7 @@ class EagerLoading : ServiceBase<List<Payment>>(), ParserGeneral {
             .findMany().onEach { resultPostProcessor(it) }
 
     private fun resultPostProcessor(payment: Payment) {
-        payment["relatedCustomer"] = payment.findRelatedOne(db, db.tabCustomer)
+        payment.put("relatedCustomer",payment.findRelatedOne(db, db.tabCustomer))
     }
 
     companion object {

@@ -1,40 +1,20 @@
 package io.daobab.demo.dao.column
 
-import io.daobab.model.Column
-import io.daobab.model.EntityRelationMap
-import io.daobab.model.EntityMap
+import io.daobab.creation.DaobabCache
+import io.daobab.model.*;
 
+interface Password<E : Entity, F> : RelatedTo<E>, MapHandler<E> {
 
+	fun getPassword(): F = readParam("Password")
 
-interface Password<E : EntityMap, F> : EntityRelationMap<E> {
-
-    fun getPassword(): F = getColumnParam("Password")
-    @Suppress("UNCHECKED_CAST")
-    fun setPassword(value: F): E {
-		setColumnParam("Password", value)
-		return this as E
+	fun setPassword(value: F): E {
+		return storeParam("Password", value)
 	}
+
     /**
-     * table:STAFF,type:VARCHAR,size:40,nullable:true
+     * table:STAFF, type:VARCHAR, size:40, nullable:true
      */
-    fun colPassword() =
-        object : Column<E, F, Password<*, F>> {
-            override fun getColumnName() = "PASSWORD"
-            override fun getFieldName() = "Password"
-            override fun getInstance() = entity
-            override fun getFieldClass() = String::class.java
-            override fun getValue(entity: Password<*, F>) = entity.getPassword()
-            override fun hashCode() = toString().hashCode()
-            override fun toString() = "$entityName.$fieldName"
-            override fun setValue(entity: Password<*, F>, value: F){
-                entity.setPassword(value)
-            }
-            override fun equals(other: Any?): Boolean {
-                if (this === other) return true
-                if (other == null) return false
-                if (javaClass != other.javaClass) return false
-                val otherColumn = other as Column<*, *, *>
-                return hashCode() == otherColumn.hashCode()
-            }
-        }
-    }
+	fun colPassword(): Column<E, F, out RelatedTo<E>> =
+		DaobabCache.getColumn("Password", "PASSWORD", this as Table<*>, String::class.java) as  Column<E, F, out RelatedTo<E>> 
+	
+}

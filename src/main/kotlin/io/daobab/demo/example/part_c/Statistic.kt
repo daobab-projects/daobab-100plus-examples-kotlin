@@ -32,7 +32,7 @@ class Statistic : ServiceBase<Unit>(), MetaDataTables {
         }
         val rs = db.statistics.findMany()
         log.info(rs.size.toString())
-        rs.onEach { log.info(it.toJSON()) }
+        rs.onEach { log.info(it.toJson()) }
     }
 
     companion object {

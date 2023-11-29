@@ -23,9 +23,9 @@ class QueryMultiEntity : ServiceBase<Unit>(), MetaDataTables, FunctionWhispererH
         mt.register(db.select(db.tabFilmText).whereEqual(db.tabFilmText.colFilmId(), 1))
 
         //queries...
-        val c1 = mt.select(db.tabFilmActor).countAny()
-        val c2 = mt.select(db.tabFilmCategory).countAny()
-        val c3 = mt.select(db.tabFilmText).countAny()
+        val c1 = mt.select(count(db.tabFilmActor)).findOne()
+        val c2 = mt.select(count(db.tabFilmCategory)).findOne()
+        val c3 = mt.select(count(db.tabFilmText)).findOne()
 
         //results...
         log.info(toString(c1))

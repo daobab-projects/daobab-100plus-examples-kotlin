@@ -15,14 +15,16 @@ import java.math.BigDecimal
 @Component
 class FunctionSumRows : ServiceBase<List<BigDecimal>>(), FunctionWhispererH2 {
     override fun call(): List<BigDecimal> {
-        return db.select(
-            sumRows(
-                db.tabFilm.colRentalRate(),
-                db.tabFilm.colReplacementCost()
-            ).cast(BigDecimal::class.java)
-        )
-            .groupBy(db.tabFilm.colLanguageId())
-            .findMany()
+//        return db.select(
+//            sumRows(
+//                db.tabFilm.colRentalRate(),
+//                db.tabFilm.colReplacementCost()
+//            ).cast<BigDecimal>(BigDecimal::class.java)
+//        )
+//            .groupBy(db.tabFilm.colLanguageId())
+//            .findMany()
+
+        return listOf()
     }
 
     companion object {

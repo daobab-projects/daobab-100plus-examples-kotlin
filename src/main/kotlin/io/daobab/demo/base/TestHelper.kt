@@ -1,6 +1,6 @@
 package io.daobab.demo.base
 
-import io.daobab.model.EntityMap
+import io.daobab.model.Entity
 import io.daobab.model.PrimaryKey
 import io.daobab.target.buffer.single.Entities
 import io.daobab.model.Plate
@@ -12,30 +12,30 @@ import java.util.function.Consumer
 
 interface TestHelper {
     val log: Logger
-    fun <E> validation(entity: E) where E : EntityMap?, E : PrimaryKey<*, *, *>? {
+    fun <E> validation(entity: E) where E : Entity?, E : PrimaryKey<*, *, *>? {
         check(entity)
-        log.info("Result: entity " + entity!!.entityName)
-        log.info(entity.toJSON())
+        log.info("Result: entity " + entity!!.entityClass().simpleName)
+        log.info(entity.toJson())
     }
 
-    fun <E> validation(entity: Entities<E>) where E : EntityMap?, E : PrimaryKey<*, *, *>? {
+    fun <E> validation(entity: Entities<E>) where E : Entity?, E : PrimaryKey<*, *, *>? {
         check(entity)
-        log.info(entity.toJSON())
+        log.info(entity.toJson())
     }
 
     fun validation(entity: Plate) {
         check(entity)
-        log.info(entity.toJSON())
+        log.info(entity.toJson())
     }
 
     fun validation(entity: Plates) {
         check(entity)
-        log.info(entity.toJSON())
+        log.info(entity.toJson())
     }
 
     fun validation(entity: FlatPlates) {
         check(entity)
-        log.info(entity.toJSON())
+        log.info(entity.toJson())
     }
 
     fun <F> validation(entity: List<F>) {

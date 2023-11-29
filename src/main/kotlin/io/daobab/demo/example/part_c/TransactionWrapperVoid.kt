@@ -20,7 +20,7 @@ class TransactionWrapperVoid : ServiceBase<Unit>() {
         val cat = Category()
             .setLastUpdate(LocalDateTime.now())
             .setName("test")
-        val anotherCat = db.select(db.tabCategory).whereEqual(db.tabCategory.colID(), 1).findOne().clone()
+        val anotherCat = db.select(db.tabCategory).whereEqual(db.tabCategory.colID(), 1).findOne()
         anotherCat.setName("anotherName")
         db.wrapTransaction {
             it.insert(cat).execute()

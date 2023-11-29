@@ -3,6 +3,7 @@ package io.daobab.demo.base
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.AppenderBase
 import io.daobab.demo.dao.SakilaDataBase
+import io.daobab.parser.ParserDate
 import io.daobab.parser.ParserGeneral
 import org.springframework.context.annotation.Configuration
 import java.util.*
@@ -43,7 +44,7 @@ class InMemoryAppender : AppenderBase<ILoggingEvent>(), ParserGeneral {
                     sb.append(msg)
                     continue
                 }
-                sb.append(toSting(Date(record.timeStamp), "HH:mm:SSS - "))
+                sb.append(ParserDate.toString(Date(record.timeStamp), "HH:mm:SSS - "))
                     .append(if (query) "<b><big><code>" + record.message + "</b></big></code>" else record.message)
                     .append("<br>")
             }

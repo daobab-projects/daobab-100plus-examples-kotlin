@@ -1,25 +1,14 @@
 package io.daobab.demo.dao.table
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect
-import com.fasterxml.jackson.annotation.JsonInclude
-import io.daobab.clone.EntityDuplicator
-import io.daobab.model.Column
-import io.daobab.model.TableColumn
-import io.daobab.model.PrimaryKey
 import io.daobab.demo.dao.column.CountryId
 import io.daobab.demo.dao.column.LastUpdate
 
-import io.daobab.model.Table
-
+import io.daobab.creation.DaobabCache
+import io.daobab.model.*
 import java.time.LocalDateTime
 import java.util.*
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE)
-class Country : Table(), 
+class Country : Table<Country>, 
 	CountryId<Country, Int>,
 	io.daobab.demo.dao.column.Country<Country, String>,
 	LastUpdate<Country, LocalDateTime>,
@@ -27,31 +16,30 @@ class Country : Table(),
 	PrimaryKey<Country,Int,CountryId<*, Int>>
 	{
 
-	override fun getEntityName() = "COUNTRY"
+	constructor (): super()
 
-	override fun columns() = 
-		listOf(
+	constructor (parameters: Map<String?, Any?>?): super(parameters)
+
+	override fun columns(): List<TableColumn> = 
+		DaobabCache.getTableColumns(this) {
+			Arrays.asList(
 			TableColumn(colCountryId()).primaryKey().size(16),
 			TableColumn(colCountry()).size(50),
 			TableColumn(colLastUpdate()).size(26).scale(6)
-		)
 
-	override fun clone(): Country  {
-		return EntityDuplicator.cloneEntity(this)
-	}
-
-	override fun colID() = colCountryId() 
+	)
+}
+	
+override fun colID(): Column<Country, Int, CountryId<*, Int>> = colCountryId() as Column< Country, Int, CountryId<*, Int>>
 
 	override fun hashCode() = Objects.hashCode(id)
 
-    override fun equals(obj: Any?): Boolean {
-        if (this === obj) return true
-        if (obj == null) return false
-        if (javaClass != obj.javaClass) return false
-        val other: PrimaryKey<*, *, *> = obj as PrimaryKey<*, *, *>
-        return id == other.id
-    }
-
-
+	override fun equals(obj: Any?): Boolean {
+		if (this === obj) return true
+		if (obj == null) return false
+		if (javaClass != obj.javaClass) return false
+		val other: PrimaryKey<*, *, *> = obj as PrimaryKey<*, *, *>
+		return id == other.id
+	}
 
 }

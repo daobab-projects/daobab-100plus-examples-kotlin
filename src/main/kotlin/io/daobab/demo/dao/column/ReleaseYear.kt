@@ -1,40 +1,20 @@
 package io.daobab.demo.dao.column
 
-import io.daobab.model.Column
-import io.daobab.model.EntityRelationMap
-import io.daobab.model.EntityMap
-
+import io.daobab.creation.DaobabCache
+import io.daobab.model.*;
 import java.time.LocalDate
+interface ReleaseYear<E : Entity, F> : RelatedTo<E>, MapHandler<E> {
 
-interface ReleaseYear<E : EntityMap, F> : EntityRelationMap<E> {
+	fun getReleaseYear(): F = readParam("ReleaseYear")
 
-    fun getReleaseYear(): F = getColumnParam("ReleaseYear")
-    @Suppress("UNCHECKED_CAST")
-    fun setReleaseYear(value: F): E {
-		setColumnParam("ReleaseYear", value)
-		return this as E
+	fun setReleaseYear(value: F): E {
+		return storeParam("ReleaseYear", value)
 	}
+
     /**
-     * table:FILM,type:DATE,size:10,nullable:true
+     * table:FILM, type:DATE, size:10, nullable:true
      */
-    fun colReleaseYear() =
-        object : Column<E, F, ReleaseYear<*, F>> {
-            override fun getColumnName() = "RELEASE_YEAR"
-            override fun getFieldName() = "ReleaseYear"
-            override fun getInstance() = entity
-            override fun getFieldClass() = LocalDate::class.java
-            override fun getValue(entity: ReleaseYear<*, F>) = entity.getReleaseYear()
-            override fun hashCode() = toString().hashCode()
-            override fun toString() = "$entityName.$fieldName"
-            override fun setValue(entity: ReleaseYear<*, F>, value: F){
-                entity.setReleaseYear(value)
-            }
-            override fun equals(other: Any?): Boolean {
-                if (this === other) return true
-                if (other == null) return false
-                if (javaClass != other.javaClass) return false
-                val otherColumn = other as Column<*, *, *>
-                return hashCode() == otherColumn.hashCode()
-            }
-        }
-    }
+	fun colReleaseYear(): Column<E, F, out RelatedTo<E>> =
+		DaobabCache.getColumn("ReleaseYear", "RELEASE_YEAR", this as Table<*>, LocalDate::class.java) as  Column<E, F, out RelatedTo<E>> 
+	
+}

@@ -1,40 +1,20 @@
 package io.daobab.demo.dao.column
 
-import io.daobab.model.Column
-import io.daobab.model.EntityRelationMap
-import io.daobab.model.EntityMap
+import io.daobab.creation.DaobabCache
+import io.daobab.model.*;
 
+interface Length<E : Entity, F> : RelatedTo<E>, MapHandler<E> {
 
+	fun getLength(): F = readParam("Length")
 
-interface Length<E : EntityMap, F> : EntityRelationMap<E> {
-
-    fun getLength(): F = getColumnParam("Length")
-    @Suppress("UNCHECKED_CAST")
-    fun setLength(value: F): E {
-		setColumnParam("Length", value)
-		return this as E
+	fun setLength(value: F): E {
+		return storeParam("Length", value)
 	}
+
     /**
-     * table:FILM,type:SMALLINT,size:16,nullable:true
+     * table:FILM, type:SMALLINT, size:16, nullable:true
      */
-    fun colLength() =
-        object : Column<E, F, Length<*, F>> {
-            override fun getColumnName() = "LENGTH"
-            override fun getFieldName() = "Length"
-            override fun getInstance() = entity
-            override fun getFieldClass() = Int::class.java
-            override fun getValue(entity: Length<*, F>) = entity.getLength()
-            override fun hashCode() = toString().hashCode()
-            override fun toString() = "$entityName.$fieldName"
-            override fun setValue(entity: Length<*, F>, value: F){
-                entity.setLength(value)
-            }
-            override fun equals(other: Any?): Boolean {
-                if (this === other) return true
-                if (other == null) return false
-                if (javaClass != other.javaClass) return false
-                val otherColumn = other as Column<*, *, *>
-                return hashCode() == otherColumn.hashCode()
-            }
-        }
-    }
+	fun colLength(): Column<E, F, out RelatedTo<E>> =
+		DaobabCache.getColumn("Length", "LENGTH", this as Table<*>, Int::class.java) as  Column<E, F, out RelatedTo<E>> 
+	
+}

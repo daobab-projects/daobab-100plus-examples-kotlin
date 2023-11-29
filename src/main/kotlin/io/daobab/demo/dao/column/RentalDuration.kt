@@ -1,40 +1,20 @@
 package io.daobab.demo.dao.column
 
-import io.daobab.model.Column
-import io.daobab.model.EntityRelationMap
-import io.daobab.model.EntityMap
+import io.daobab.creation.DaobabCache
+import io.daobab.model.*;
 
+interface RentalDuration<E : Entity, F> : RelatedTo<E>, MapHandler<E> {
 
+	fun getRentalDuration(): F = readParam("RentalDuration")
 
-interface RentalDuration<E : EntityMap, F> : EntityRelationMap<E> {
-
-    fun getRentalDuration(): F = getColumnParam("RentalDuration")
-    @Suppress("UNCHECKED_CAST")
-    fun setRentalDuration(value: F): E {
-		setColumnParam("RentalDuration", value)
-		return this as E
+	fun setRentalDuration(value: F): E {
+		return storeParam("RentalDuration", value)
 	}
+
     /**
-     * table:FILM,type:TINYINT,size:8,nullable:false
+     * table:FILM, type:TINYINT, size:8, nullable:false
      */
-    fun colRentalDuration() =
-        object : Column<E, F, RentalDuration<*, F>> {
-            override fun getColumnName() = "RENTAL_DURATION"
-            override fun getFieldName() = "RentalDuration"
-            override fun getInstance() = entity
-            override fun getFieldClass() = Int::class.java
-            override fun getValue(entity: RentalDuration<*, F>) = entity.getRentalDuration()
-            override fun hashCode() = toString().hashCode()
-            override fun toString() = "$entityName.$fieldName"
-            override fun setValue(entity: RentalDuration<*, F>, value: F){
-                entity.setRentalDuration(value)
-            }
-            override fun equals(other: Any?): Boolean {
-                if (this === other) return true
-                if (other == null) return false
-                if (javaClass != other.javaClass) return false
-                val otherColumn = other as Column<*, *, *>
-                return hashCode() == otherColumn.hashCode()
-            }
-        }
-    }
+	fun colRentalDuration(): Column<E, F, out RelatedTo<E>> =
+		DaobabCache.getColumn("RentalDuration", "RENTAL_DURATION", this as Table<*>, Int::class.java) as  Column<E, F, out RelatedTo<E>> 
+	
+}

@@ -1,40 +1,20 @@
 package io.daobab.demo.dao.column
 
-import io.daobab.model.Column
-import io.daobab.model.EntityRelationMap
-import io.daobab.model.EntityMap
-
+import io.daobab.creation.DaobabCache
+import io.daobab.model.*;
 import java.time.LocalDateTime
+interface CreateDate<E : Entity, F> : RelatedTo<E>, MapHandler<E> {
 
-interface CreateDate<E : EntityMap, F> : EntityRelationMap<E> {
+	fun getCreateDate(): F = readParam("CreateDate")
 
-    fun getCreateDate(): F = getColumnParam("CreateDate")
-    @Suppress("UNCHECKED_CAST")
-    fun setCreateDate(value: F): E {
-		setColumnParam("CreateDate", value)
-		return this as E
+	fun setCreateDate(value: F): E {
+		return storeParam("CreateDate", value)
 	}
+
     /**
-     * table:CUSTOMER,type:TIMESTAMP,size:26,nullable:false
+     * table:CUSTOMER, type:TIMESTAMP, size:26, nullable:false
      */
-    fun colCreateDate() =
-        object : Column<E, F, CreateDate<*, F>> {
-            override fun getColumnName() = "CREATE_DATE"
-            override fun getFieldName() = "CreateDate"
-            override fun getInstance() = entity
-            override fun getFieldClass() = LocalDateTime::class.java
-            override fun getValue(entity: CreateDate<*, F>) = entity.getCreateDate()
-            override fun hashCode() = toString().hashCode()
-            override fun toString() = "$entityName.$fieldName"
-            override fun setValue(entity: CreateDate<*, F>, value: F){
-                entity.setCreateDate(value)
-            }
-            override fun equals(other: Any?): Boolean {
-                if (this === other) return true
-                if (other == null) return false
-                if (javaClass != other.javaClass) return false
-                val otherColumn = other as Column<*, *, *>
-                return hashCode() == otherColumn.hashCode()
-            }
-        }
-    }
+	fun colCreateDate(): Column<E, F, out RelatedTo<E>> =
+		DaobabCache.getColumn("CreateDate", "CREATE_DATE", this as Table<*>, LocalDateTime::class.java) as  Column<E, F, out RelatedTo<E>> 
+	
+}

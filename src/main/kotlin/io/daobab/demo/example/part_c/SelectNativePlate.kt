@@ -22,7 +22,7 @@ class SelectNativePlate : ServiceBase<FlatPlate>() {
                 where f.film_id=15
                 """,
             db.tabFilm.colTitle(), db.tabCategory.colName()
-        ).findOneAsFlat()
+        ).findOne().toFlat()
 
 
     companion object {
