@@ -23,7 +23,7 @@ class ResultPostProcessor : ServiceBase<List<Payment>>(), ParserGeneral {
             .onEach { myPostProcess(it) }
 
     private fun myPostProcess(payment: Payment) {
-        payment["amount_GT_200"] = payment.getAmount() > BigDecimal(200)
+        payment.put("amount_GT_200", payment.getAmount() > BigDecimal(200))
     }
 
     companion object {

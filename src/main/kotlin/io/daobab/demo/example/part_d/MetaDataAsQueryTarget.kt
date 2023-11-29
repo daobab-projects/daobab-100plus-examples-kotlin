@@ -22,7 +22,7 @@ class MetaDataAsQueryTarget : ServiceBase<Unit>(), MetaDataTables {
             .whereEqual(t.colDatatype(), JdbcType.VARCHAR)
             .orderAscBy(t.colTableColumnName())
             .findMany()
-            .forEach { log.info(it.toJSON()) }
+            .forEach { log.info(it.toJson()) }
     }
 
     companion object {

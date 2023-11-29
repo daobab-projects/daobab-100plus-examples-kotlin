@@ -3,6 +3,8 @@ package io.daobab.demo.example.part_c
 import io.daobab.demo.DemoApplication
 import io.daobab.demo.base.ServiceBase
 import io.daobab.demo.dao.Lang
+import io.daobab.demo.dao.table.Language
+import io.daobab.model.Column
 import org.springframework.boot.SpringApplication
 import org.springframework.stereotype.Component
 
@@ -23,7 +25,7 @@ class InMemoryCascadeSelects : ServiceBase<List<String>>() {
         val allFilms = db.findAll(t)
 
         //english language all movies
-        val englishMovies = allFilms.select(t).whereEqual(t.colLanguageId(), en).findMany()
+        val englishMovies = allFilms.select(t).whereEqual(t.colLanguageId() as Column<Language, Int, Language>, en).findMany()
 
         //english language all movies having length longer than 150 minutes
         val longEnglishMovies = englishMovies.select(t)

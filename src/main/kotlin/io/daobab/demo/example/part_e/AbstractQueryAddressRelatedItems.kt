@@ -3,7 +3,7 @@ package io.daobab.demo.example.part_e
 import io.daobab.demo.DemoApplication
 import io.daobab.demo.base.ServiceBase
 import io.daobab.demo.dao.column.AddressId
-import io.daobab.model.EntityMap
+import io.daobab.model.Entity
 import io.daobab.target.buffer.single.Entities
 import org.springframework.boot.SpringApplication
 import org.springframework.stereotype.Component
@@ -24,10 +24,10 @@ class AbstractQueryAddressRelatedItems : ServiceBase<Unit>() {
         val staff = findAddressRelated(db.tabStaff, adress)
     }
 
-    fun <V : EntityMap, E> findAddressRelated(
+    fun <V : Entity, E> findAddressRelated(
         entity: E,
         addressId: AddressId<V, Int>
-    ): Entities<E> where E : EntityMap, E : AddressId<E, Int> =
+    ): Entities<E> where E : Entity, E : AddressId<E, Int> =
         db.select(entity)
             .whereEqual(entity.colAddressId(), addressId.getAddressId())
             .findMany()

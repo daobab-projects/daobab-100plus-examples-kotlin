@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component
  * ---------------------------------------------------------
  * Entity to JSON
  * ---------------------------------------------------------
- * - How to use internal toJSON() method into Entity
+ * - How to use internal toJson() method into Entity
  */
 @Component
 class ToJsonEntity : ServiceBase<Unit>() {
     override fun call() {
         val film= db.findOneByPk(db.tabFilm, 1)
-        log.info(film.toJSON())
+        log.info(film.toJson())
     }
 
     companion object {

@@ -99,7 +99,7 @@ class SakilaDataBase : DataBaseTarget(), SqlProducer {
     }
 
     override fun <E : Entity> getPrimaryKeyGenerator(entity: E): DataBaseIdGeneratorSupplier<*>? {
-        return if (Rental::class.java == entity.entityClass) {
+        return if (Rental::class.java == entity.javaClass) {
             rentalGenerator
         } else null
     }

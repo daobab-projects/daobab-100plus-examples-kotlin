@@ -15,21 +15,7 @@ import org.springframework.stereotype.Component
 @Component
 class Count : ServiceBase<Long>(), FunctionWhispererH2 {
     override fun call(): Long {
-        return db.select(db.tabCustomer).whereGreater(db.tabCustomer.colID(), 10).countAny()
-    }
-
-    fun count(): Long {
-        val c: Customer = db.tabCustomer
-        return db.select(c)
-            .whereGreater(c.colID(), 10)
-            .countAny()
-    }
-
-    fun count3(): Long {
-        val c = db.tabCustomer
-        return db.select(count(c.colID()))
-            .whereGreater(c.colID(), 10)
-            .findOne()
+        return db.select(count(db.tabCustomer)).whereGreater(db.tabCustomer.colID(), 10).findOne()
     }
 
     companion object {

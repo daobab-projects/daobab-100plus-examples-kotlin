@@ -1,40 +1,20 @@
 package io.daobab.demo.dao.column
 
-import io.daobab.model.Column
-import io.daobab.model.EntityRelationMap
-import io.daobab.model.EntityMap
+import io.daobab.creation.DaobabCache
+import io.daobab.model.*;
 
+interface PaymentId<E : Entity, F> : RelatedTo<E>, MapHandler<E> {
 
+	fun getPaymentId(): F = readParam("PaymentId")
 
-interface PaymentId<E : EntityMap, F> : EntityRelationMap<E> {
-
-    fun getPaymentId(): F = getColumnParam("PaymentId")
-    @Suppress("UNCHECKED_CAST")
-    fun setPaymentId(value: F): E {
-		setColumnParam("PaymentId", value)
-		return this as E
+	fun setPaymentId(value: F): E {
+		return storeParam("PaymentId", value)
 	}
+
     /**
-     * table:PAYMENT,type:SMALLINT,size:16,nullable:false
+     * table:PAYMENT, type:SMALLINT, size:16, nullable:false
      */
-    fun colPaymentId() =
-        object : Column<E, F, PaymentId<*, F>> {
-            override fun getColumnName() = "PAYMENT_ID"
-            override fun getFieldName() = "PaymentId"
-            override fun getInstance() = entity
-            override fun getFieldClass() = Int::class.java
-            override fun getValue(entity: PaymentId<*, F>) = entity.getPaymentId()
-            override fun hashCode() = toString().hashCode()
-            override fun toString() = "$entityName.$fieldName"
-            override fun setValue(entity: PaymentId<*, F>, value: F){
-                entity.setPaymentId(value)
-            }
-            override fun equals(other: Any?): Boolean {
-                if (this === other) return true
-                if (other == null) return false
-                if (javaClass != other.javaClass) return false
-                val otherColumn = other as Column<*, *, *>
-                return hashCode() == otherColumn.hashCode()
-            }
-        }
-    }
+	fun colPaymentId(): Column<E, F, out RelatedTo<E>> =
+		DaobabCache.getColumn("PaymentId", "PAYMENT_ID", this as Table<*>, Int::class.java) as  Column<E, F, out RelatedTo<E>> 
+	
+}

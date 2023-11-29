@@ -1,40 +1,20 @@
 package io.daobab.demo.dao.column
 
-import io.daobab.model.Column
-import io.daobab.model.EntityRelationMap
-import io.daobab.model.EntityMap
+import io.daobab.creation.DaobabCache
+import io.daobab.model.*;
 
+interface Phone<E : Entity, F> : RelatedTo<E>, MapHandler<E> {
 
+	fun getPhone(): F = readParam("Phone")
 
-interface Phone<E : EntityMap, F> : EntityRelationMap<E> {
-
-    fun getPhone(): F = getColumnParam("Phone")
-    @Suppress("UNCHECKED_CAST")
-    fun setPhone(value: F): E {
-		setColumnParam("Phone", value)
-		return this as E
+	fun setPhone(value: F): E {
+		return storeParam("Phone", value)
 	}
+
     /**
-     * table:ADDRESS,type:VARCHAR,size:20,nullable:false
+     * table:ADDRESS, type:VARCHAR, size:20, nullable:false
      */
-    fun colPhone() =
-        object : Column<E, F, Phone<*, F>> {
-            override fun getColumnName() = "PHONE"
-            override fun getFieldName() = "Phone"
-            override fun getInstance() = entity
-            override fun getFieldClass() = String::class.java
-            override fun getValue(entity: Phone<*, F>) = entity.getPhone()
-            override fun hashCode() = toString().hashCode()
-            override fun toString() = "$entityName.$fieldName"
-            override fun setValue(entity: Phone<*, F>, value: F){
-                entity.setPhone(value)
-            }
-            override fun equals(other: Any?): Boolean {
-                if (this === other) return true
-                if (other == null) return false
-                if (javaClass != other.javaClass) return false
-                val otherColumn = other as Column<*, *, *>
-                return hashCode() == otherColumn.hashCode()
-            }
-        }
-    }
+	fun colPhone(): Column<E, F, out RelatedTo<E>> =
+		DaobabCache.getColumn("Phone", "PHONE", this as Table<*>, String::class.java) as  Column<E, F, out RelatedTo<E>> 
+	
+}

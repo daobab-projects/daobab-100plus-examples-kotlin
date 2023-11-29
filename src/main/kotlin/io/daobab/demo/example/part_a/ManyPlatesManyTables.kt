@@ -35,7 +35,7 @@ class ManyPlatesManyTables : ServiceBase<Plates>() {
 
     private fun logResult(plate: Plate, vararg col: Column<*, *, *>) {
         col.forEach {
-            log.info("entity:" + it.entityName + ",column:" + it.columnName + ",value:" + plate.getValue(it))
+            log.info("entity:" + it.entityClass().simpleName + ",column:" + it.columnName + ",value:" + plate.getValue(it))
         }
     }
 

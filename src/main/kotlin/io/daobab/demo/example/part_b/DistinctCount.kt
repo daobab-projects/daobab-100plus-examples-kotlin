@@ -14,11 +14,7 @@ import org.springframework.stereotype.Component
 @Component
 class DistinctCount : ServiceBase<Long>(), FunctionWhispererH2 {
     override fun call(): Long =
-        db.select(db.tabCustomer.colFirstName())
-            .distinct()
-            .countAny()
-
-    fun way02(): Long = db.select(count(distinct(db.tabCustomer.colFirstName()))).findOne()
+        db.select(count(distinct(db.tabCustomer.colFirstName()))).findOne()
 
 
     companion object {

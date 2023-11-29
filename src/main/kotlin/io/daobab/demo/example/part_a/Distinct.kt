@@ -2,6 +2,7 @@ package io.daobab.demo.example.part_a
 
 import io.daobab.demo.DemoApplication
 import io.daobab.demo.base.ServiceBase
+import io.daobab.statement.function.FunctionWhispererH2
 import org.springframework.boot.SpringApplication
 import org.springframework.stereotype.Component
 
@@ -11,11 +12,10 @@ import org.springframework.stereotype.Component
  * ---------------------------------------------------------
  */
 @Component
-class Distinct : ServiceBase<List<String>>() {
+class Distinct : ServiceBase<List<String>>(), FunctionWhispererH2 {
     override fun call(): List<String> {
         val tab = db.tabCustomer
-        return db.select(tab.colFirstName())
-            .distinct()
+        return db.select(distinct(tab.colFirstName()))
             .orderAscBy(tab.colFirstName())
             .limitBy(15)
             .findMany()

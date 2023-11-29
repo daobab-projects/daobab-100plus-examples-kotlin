@@ -2,8 +2,8 @@ package io.daobab.demo.example.function
 
 import io.daobab.demo.DemoApplication
 import io.daobab.demo.base.ServiceBase
-import io.daobab.model.Entity
-import io.daobab.model.EntityRelation
+import io.daobab.model.RelatedTo
+import io.daobab.model.Table
 import io.daobab.statement.function.FunctionWhispererH2
 import org.springframework.boot.SpringApplication
 import org.springframework.stereotype.Component
@@ -17,7 +17,7 @@ import java.sql.Timestamp
 @Component
 class FunctionCurrentDate : ServiceBase<Timestamp>(), FunctionWhispererH2 {
     override fun call(): Timestamp =
-        db.select(currentDate<Entity, Any, EntityRelation<*>>()).findOne()
+        db.select(currentDate<Table<*>, Any, RelatedTo<*>>()).findOne()
 
 
     companion object {

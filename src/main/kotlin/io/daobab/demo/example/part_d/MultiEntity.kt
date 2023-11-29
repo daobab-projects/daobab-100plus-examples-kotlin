@@ -26,9 +26,9 @@ class MultiEntity : ServiceBase<Unit>(), MetaDataTables, FunctionWhispererH2, Pa
         )
 
         //queries...
-        val cn1 = mt.select(db.tabFilmActor).countAny()
-        val cn2 = mt.select(db.tabFilmCategory).countAny()
-        val cn3 = mt.select(db.tabFilmText).countAny()
+        val cn1 = mt.select(count(db.tabFilmActor)).findOne()
+        val cn2 = mt.select(count(db.tabFilmCategory)).findOne()
+        val cn3 = mt.select(count(db.tabFilmText)).findOne()
 
         //results...
         log.info(toString(cn1))

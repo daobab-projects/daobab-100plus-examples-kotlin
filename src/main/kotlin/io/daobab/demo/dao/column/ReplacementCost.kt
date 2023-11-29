@@ -1,40 +1,20 @@
 package io.daobab.demo.dao.column
 
-import io.daobab.model.Column
-import io.daobab.model.EntityRelationMap
-import io.daobab.model.EntityMap
-
+import io.daobab.creation.DaobabCache
+import io.daobab.model.*;
 import java.math.BigDecimal
+interface ReplacementCost<E : Entity, F> : RelatedTo<E>, MapHandler<E> {
 
-interface ReplacementCost<E : EntityMap, F> : EntityRelationMap<E> {
+	fun getReplacementCost(): F = readParam("ReplacementCost")
 
-    fun getReplacementCost(): F = getColumnParam("ReplacementCost")
-    @Suppress("UNCHECKED_CAST")
-    fun setReplacementCost(value: F): E {
-		setColumnParam("ReplacementCost", value)
-		return this as E
+	fun setReplacementCost(value: F): E {
+		return storeParam("ReplacementCost", value)
 	}
+
     /**
-     * table:FILM,type:DECIMAL,size:5,nullable:false
+     * table:FILM, type:DECIMAL, size:5, nullable:false
      */
-    fun colReplacementCost() =
-        object : Column<E, F, ReplacementCost<*, F>> {
-            override fun getColumnName() = "REPLACEMENT_COST"
-            override fun getFieldName() = "ReplacementCost"
-            override fun getInstance() = entity
-            override fun getFieldClass() = BigDecimal::class.java
-            override fun getValue(entity: ReplacementCost<*, F>) = entity.getReplacementCost()
-            override fun hashCode() = toString().hashCode()
-            override fun toString() = "$entityName.$fieldName"
-            override fun setValue(entity: ReplacementCost<*, F>, value: F){
-                entity.setReplacementCost(value)
-            }
-            override fun equals(other: Any?): Boolean {
-                if (this === other) return true
-                if (other == null) return false
-                if (javaClass != other.javaClass) return false
-                val otherColumn = other as Column<*, *, *>
-                return hashCode() == otherColumn.hashCode()
-            }
-        }
-    }
+	fun colReplacementCost(): Column<E, F, out RelatedTo<E>> =
+		DaobabCache.getColumn("ReplacementCost", "REPLACEMENT_COST", this as Table<*>, BigDecimal::class.java) as  Column<E, F, out RelatedTo<E>> 
+	
+}

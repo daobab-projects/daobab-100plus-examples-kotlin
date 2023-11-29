@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component
 class NonHeapBuffer : ServiceBase<Unit>(), MetaDataTables {
     override fun call() {
         val nonHeap = db.select(db.tabFilm).toNonHeap()
-        nonHeap.select(db.tabFilm).whereLess(db.tabFilm.colFilmId(), 4).findMany().forEach { log.info(it.toJSON()) }
-        db.select(db.tabFilm).whereLess(db.tabFilm.colFilmId(), 4).findMany().forEach { log.info(it.toJSON()) }
+        nonHeap.select(db.tabFilm).whereLess(db.tabFilm.colFilmId(), 4).findMany().forEach { log.info(it.toJson()) }
+        db.select(db.tabFilm).whereLess(db.tabFilm.colFilmId(), 4).findMany().forEach { log.info(it.toJson()) }
     }
 
     companion object {

@@ -1,42 +1,22 @@
 package io.daobab.demo.dao.column
 
-import io.daobab.model.Column
-import io.daobab.model.EntityRelationMap
-import io.daobab.model.EntityMap
+import io.daobab.creation.DaobabCache
+import io.daobab.model.*;
 
+interface FirstName<E : Entity, F> : RelatedTo<E>, MapHandler<E> {
 
+	fun getFirstName(): F = readParam("FirstName")
 
-interface FirstName<E : EntityMap, F> : EntityRelationMap<E> {
-
-    fun getFirstName(): F = getColumnParam("FirstName")
-    @Suppress("UNCHECKED_CAST")
-    fun setFirstName(value: F): E {
-		setColumnParam("FirstName", value)
-		return this as E
+	fun setFirstName(value: F): E {
+		return storeParam("FirstName", value)
 	}
+
     /**
-     * table:ACTOR,type:VARCHAR,size:45,nullable:false
-     * table:CUSTOMER,type:VARCHAR,size:45,nullable:false
-     * table:STAFF,type:VARCHAR,size:45,nullable:false
+     * table:ACTOR, type:VARCHAR, size:45, nullable:false
+     * table:CUSTOMER, type:VARCHAR, size:45, nullable:false
+     * table:STAFF, type:VARCHAR, size:45, nullable:false
      */
-    fun colFirstName() =
-        object : Column<E, F, FirstName<*, F>> {
-            override fun getColumnName() = "FIRST_NAME"
-            override fun getFieldName() = "FirstName"
-            override fun getInstance() = entity
-            override fun getFieldClass() = String::class.java
-            override fun getValue(entity: FirstName<*, F>) = entity.getFirstName()
-            override fun hashCode() = toString().hashCode()
-            override fun toString() = "$entityName.$fieldName"
-            override fun setValue(entity: FirstName<*, F>, value: F){
-                entity.setFirstName(value)
-            }
-            override fun equals(other: Any?): Boolean {
-                if (this === other) return true
-                if (other == null) return false
-                if (javaClass != other.javaClass) return false
-                val otherColumn = other as Column<*, *, *>
-                return hashCode() == otherColumn.hashCode()
-            }
-        }
-    }
+	fun colFirstName(): Column<E, F, out RelatedTo<E>> =
+		DaobabCache.getColumn("FirstName", "FIRST_NAME", this as Table<*>, String::class.java) as  Column<E, F, out RelatedTo<E>> 
+	
+}

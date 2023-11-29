@@ -11,6 +11,7 @@ import io.daobab.model.Table
 import io.daobab.model.TableColumn
 import org.springframework.boot.SpringApplication
 import org.springframework.stereotype.Component
+import java.util.*
 
 /**
  * ---------------------------------------------------------
@@ -27,14 +28,12 @@ class SelectByCompositeKey : ServiceBase<FilmActor>() {
             .findOne()
     }
 
-    internal class AnotherEntityHavingTheSameCompositeKeyColumns : Table(),
+    internal class AnotherEntityHavingTheSameCompositeKeyColumns :
+        Table<AnotherEntityHavingTheSameCompositeKeyColumns>(),
         FilmActorKey<AnotherEntityHavingTheSameCompositeKeyColumns>,
-        ActorId<AnotherEntityHavingTheSameCompositeKeyColumns,Int>, FilmId<AnotherEntityHavingTheSameCompositeKeyColumns, Int>,
-        Description<AnotherEntityHavingTheSameCompositeKeyColumns, String?> {
-        override fun getEntityName(): String {
-            return "AnotherEntityHavingTheSameCompositeKeyColumns"
-        }
-
+        ActorId<AnotherEntityHavingTheSameCompositeKeyColumns, Int>,
+        FilmId<AnotherEntityHavingTheSameCompositeKeyColumns, Int>,
+        Description<AnotherEntityHavingTheSameCompositeKeyColumns, String> {
         override fun columns(): List<TableColumn> {
             return listOf(
                 TableColumn(colActorId()).primaryKey().size(5),

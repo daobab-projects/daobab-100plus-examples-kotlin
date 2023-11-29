@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component
  * ---------------------------------------------------------
  * Plate To JSon
  * ---------------------------------------------------------
- * - How to use internal toJSON() method into Plate
+ * - How to use internal toJson() method into Plate
  */
 @Component
 class ToJsonPlate : ServiceBase<FlatPlates>() {
     override fun call(): FlatPlates {
         val film =
             db.select(db.tabFilm.colTitle(), db.tabFilm.colDescription()).whereLess(db.tabFilm.colID(), 10).findManyAsFlat()
-        log.info(film.toJSON())
+        log.info(film.toJson())
         return film
     }
 

@@ -1,11 +1,5 @@
 package io.daobab.demo.dao.table
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect
-import com.fasterxml.jackson.annotation.JsonInclude
-import io.daobab.clone.EntityDuplicator
-import io.daobab.model.Column
-import io.daobab.model.TableColumn
-import io.daobab.model.PrimaryKey
 import io.daobab.demo.dao.column.StaffId
 import io.daobab.demo.dao.column.FirstName
 import io.daobab.demo.dao.column.LastName
@@ -18,17 +12,12 @@ import io.daobab.demo.dao.column.Username
 import io.daobab.demo.dao.column.Password
 import io.daobab.demo.dao.column.LastUpdate
 
-import io.daobab.model.Table
-
+import io.daobab.creation.DaobabCache
+import io.daobab.model.*
 import java.time.LocalDateTime
 import java.util.*
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE)
-class Staff : Table(), 
+class Staff : Table<Staff>, 
 	StaffId<Staff, Int>,
 	FirstName<Staff, String>,
 	LastName<Staff, String>,
@@ -44,10 +33,13 @@ class Staff : Table(),
 	PrimaryKey<Staff,Int,StaffId<*, Int>>
 	{
 
-	override fun getEntityName() = "STAFF"
+	constructor (): super()
 
-	override fun columns() = 
-		listOf(
+	constructor (parameters: Map<String?, Any?>?): super(parameters)
+
+	override fun columns(): List<TableColumn> = 
+		DaobabCache.getTableColumns(this) {
+			Arrays.asList(
 			TableColumn(colStaffId()).primaryKey().size(8),
 			TableColumn(colFirstName()).size(45),
 			TableColumn(colLastName()).size(45),
@@ -59,24 +51,20 @@ class Staff : Table(),
 			TableColumn(colUsername()).size(16),
 			TableColumn(colPassword()).size(40),
 			TableColumn(colLastUpdate()).size(26).scale(6)
-		)
 
-	override fun clone(): Staff  {
-		return EntityDuplicator.cloneEntity(this)
-	}
-
-	override fun colID() = colStaffId() 
+	)
+}
+	
+override fun colID(): Column<Staff, Int, StaffId<*, Int>> = colStaffId() as Column< Staff, Int, StaffId<*, Int>>
 
 	override fun hashCode() = Objects.hashCode(id)
 
-    override fun equals(obj: Any?): Boolean {
-        if (this === obj) return true
-        if (obj == null) return false
-        if (javaClass != obj.javaClass) return false
-        val other: PrimaryKey<*, *, *> = obj as PrimaryKey<*, *, *>
-        return id == other.id
-    }
-
-
+	override fun equals(obj: Any?): Boolean {
+		if (this === obj) return true
+		if (obj == null) return false
+		if (javaClass != obj.javaClass) return false
+		val other: PrimaryKey<*, *, *> = obj as PrimaryKey<*, *, *>
+		return id == other.id
+	}
 
 }

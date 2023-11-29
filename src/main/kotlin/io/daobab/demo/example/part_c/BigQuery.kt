@@ -2,6 +2,7 @@ package io.daobab.demo.example.part_c
 
 import io.daobab.demo.DemoApplication
 import io.daobab.demo.base.ServiceBase
+import io.daobab.parser.ParserDate
 import io.daobab.parser.ParserGeneral
 import org.springframework.boot.SpringApplication
 import org.springframework.stereotype.Component
@@ -50,7 +51,7 @@ class BigQuery : ServiceBase<List<String>>(), ParserGeneral {
                     .append(",")
                     .append(it.getValue(country.colCountry()))
                     .append(" rent on ")
-                    .append(toSting(it.getValue(p.colPaymentDate()), "EEEE, dd MMMM yyyy (HH:mm)", Locale.ENGLISH))
+                    .append(ParserDate.toString(it.getValue(p.colPaymentDate()), "EEEE, dd MMMM yyyy (HH:mm)", Locale.ENGLISH))
                     .append(" a movie: ")
                     .append(it.getValue(f.colTitle()))
                     .append(" has paid for it: ")

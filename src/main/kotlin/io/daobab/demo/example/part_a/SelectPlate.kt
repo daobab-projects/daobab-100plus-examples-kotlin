@@ -31,7 +31,7 @@ class SelectPlate : ServiceBase<Plate>() {
 
     private fun logResult(plate: Plate, vararg col: Column<*, *, *>) {
         col.forEach {
-            log.info(String.format("entity:%s ,column:%s ,value:%s", it.entityName, it.columnName, plate.getValue(it)))
+            log.info(String.format("entity:%s ,column:%s ,value:%s", it.entityClass().simpleName, it.columnName, plate.getValue(it)))
         }
     }
 

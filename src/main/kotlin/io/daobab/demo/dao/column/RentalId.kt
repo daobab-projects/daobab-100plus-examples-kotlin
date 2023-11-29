@@ -1,41 +1,21 @@
 package io.daobab.demo.dao.column
 
-import io.daobab.model.Column
-import io.daobab.model.EntityRelationMap
-import io.daobab.model.EntityMap
-
+import io.daobab.creation.DaobabCache
+import io.daobab.model.*;
 import java.math.BigDecimal
+interface RentalId<E : Entity, F> : RelatedTo<E>, MapHandler<E> {
 
-interface RentalId<E : EntityMap, F> : EntityRelationMap<E> {
+	fun getRentalId(): F = readParam("RentalId")
 
-    fun getRentalId(): F = getColumnParam("RentalId")
-    @Suppress("UNCHECKED_CAST")
-    fun setRentalId(value: F): E {
-		setColumnParam("RentalId", value)
-		return this as E
+	fun setRentalId(value: F): E {
+		return storeParam("RentalId", value)
 	}
+
     /**
-     * table:PAYMENT,type:INTEGER,size:32,nullable:true
-     * table:RENTAL,type:INTEGER,size:32,nullable:false
+     * table:PAYMENT, type:INTEGER, size:32, nullable:true
+     * table:RENTAL, type:INTEGER, size:32, nullable:false
      */
-    fun colRentalId() =
-        object : Column<E, F, RentalId<*, F>> {
-            override fun getColumnName() = "RENTAL_ID"
-            override fun getFieldName() = "RentalId"
-            override fun getInstance() = entity
-            override fun getFieldClass() = BigDecimal::class.java
-            override fun getValue(entity: RentalId<*, F>) = entity.getRentalId()
-            override fun hashCode() = toString().hashCode()
-            override fun toString() = "$entityName.$fieldName"
-            override fun setValue(entity: RentalId<*, F>, value: F){
-                entity.setRentalId(value)
-            }
-            override fun equals(other: Any?): Boolean {
-                if (this === other) return true
-                if (other == null) return false
-                if (javaClass != other.javaClass) return false
-                val otherColumn = other as Column<*, *, *>
-                return hashCode() == otherColumn.hashCode()
-            }
-        }
-    }
+	fun colRentalId(): Column<E, F, out RelatedTo<E>> =
+		DaobabCache.getColumn("RentalId", "RENTAL_ID", this as Table<*>, BigDecimal::class.java) as  Column<E, F, out RelatedTo<E>> 
+	
+}
